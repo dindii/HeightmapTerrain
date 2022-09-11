@@ -129,4 +129,10 @@ namespace Height
 		glUniform1iv(location, count, data);
 	}
 
+	void Shader::UploadInt(const std::string& name, uint32_t data)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str()); //@TODO: Cache those locations
+		glUniform1i(location, data);
+	}
+
 }

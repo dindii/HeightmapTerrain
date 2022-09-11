@@ -72,26 +72,39 @@ namespace Height
 		glViewport(x, y, width, height);
 	}
 
-	void Renderer::SetWireframeMode(bool cond)
+	void Renderer::SetWireframeMode(ERenderMode mode)
 	{
-		if (cond)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		else
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		switch (mode)
+		{
+			case ERenderMode::TRIANGLE:
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			} break;
+			case ERenderMode::LINE:
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			} break;
+
+			case ERenderMode::POINT:
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			} break;
+		}
 	}
 
 	void Renderer::Draw(Mesh* mesh, Camera* camera)
 	{
 		Application* app = Application::GetInstance();
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->GetHandle());
-
+		RenderingHandles meshHandles = mesh->GetRenderingHandles();
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshHandles.indexBufferHandle);
+		
 		Material* material = mesh->GetMaterial();
 		material->Bind();
 		material->SetViewProjection(camera->GetProjection() * camera->GetViewMatrix());
 
-		//#TODO: Please, let's use elements to draw.
-		glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
+		glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, 0);
 	}
 
 	uint32_t Renderer::GenResourceHandle()
@@ -102,16 +115,113 @@ namespace Height
 		return vertexBufferHandle;
 	}
 
-	void Renderer::RegisterData(const uint32_t objectHandleToUploadData, const std::vector<vec3>& vertexPositions)
+	uint32_t Renderer::GenIndexHandle()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, objectHandleToUploadData);
+		uint32_t returnIndexBuffer = 0;
+		
+		glGenBuffers(1, &returnIndexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, returnIndexBuffer);
+		
+		return returnIndexBuffer;
+	}
 
-		size_t bufferSize = sizeof(vec3) * vertexPositions.size();
+	void Renderer::BindTexture(uint32_t textureHandle, EMapType type)
+	{
+		glBindTextureUnit(type, textureHandle);
+	}
+
+	void Renderer::RegisterData(const RenderingHandles& handle, const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle.indexBufferHandle);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle.vertexBufferHandle);
+
+		size_t bufferSize = (sizeof(vec3) * vertexPositions.size()) + (sizeof(vec2) * texCoords.size());
+
 
 		glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3) * vertexPositions.size(), vertexPositions.data());
+		glBufferSubData(GL_ARRAY_BUFFER,   (sizeof(vec3) * vertexPositions.size()), (sizeof(vec2) * texCoords.size()), texCoords.data());
+
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), (void*)((sizeof(vec3) * vertexPositions.size())));
+	}
+
+	uint32_t Renderer::RegisterTextureResource(const uint8_t* data, const uint32_t width, const uint32_t height, const uint32_t channels)
+	{
+		GLenum internalFormat = 0, dataFormat = 0;
+
+		uint32_t m_RendererID = 0;
+
+		switch (channels)
+		{
+			case 1:
+			{
+				internalFormat = GL_R8;
+				dataFormat = GL_RED;
+				break;
+			}
+			case 3:
+			{
+				internalFormat = GL_RGB8;
+				dataFormat = GL_RGB;
+				break;
+			}
+			case 4:
+			{
+				internalFormat = GL_RGBA8;
+				dataFormat = GL_RGBA;
+				break;
+			}
+			default:
+			{
+				std::cerr << "Unknown texture format type!" << std::endl;
+				return 0;
+			}
+		}
+
+		glGenTextures(1, &m_RendererID);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+
+		glTextureStorage2D(m_RendererID, 1, internalFormat, width, height);
+
+		if (channels == 1)
+		{
+			// Parameters to avoid ImGui messing up grayscale textures.	
+			// This will make sure that the ImGui's shader can output
+			// Color(val, val, val, 1.0) instead of Color(1.0, 0.0, 0.0, 1.0).
+			glTextureParameteri(m_RendererID, GL_TEXTURE_SWIZZLE_R, GL_RED);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_SWIZZLE_G, GL_RED);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_SWIZZLE_B, GL_RED);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_SWIZZLE_A, GL_ONE);
+		}
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		//This will give support to every dimension, even those that aren't even.
+		if (!((width % 2) == 0))
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+
+		//This will give the user the freedom to start a blank texture so he can fill it later on.
+		//The only requisite is to pre-config the texture with width, height and channels to make sure it's valid
+		//If stbi could not load the image, we will catch this error in the switch above since we won't have any channel set.
+		if (data)
+		{
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
+		return m_RendererID;
+		
 	}
 
 }

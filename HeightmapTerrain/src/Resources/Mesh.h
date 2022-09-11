@@ -1,6 +1,7 @@
 #pragma once
 #include <Rendering/Renderable.h>
 #include <Visual/Material.h>
+#include <Math/vec2.h>
 
 namespace Height
 {
@@ -12,14 +13,19 @@ namespace Height
 		~Mesh() = default;
 
 		inline uint32_t GetVertexCount() const { return (uint32_t)m_VertexPositions.size(); }
+		inline uint32_t GetIndexCount()  const { return (uint32_t)m_Indices.size(); }
 
 		//When we are not loading a mesh straight away from the constructor (with a path, maybe), we may want to create a Mesh to set it's data later.
 		void SetVertexPositionData(std::vector<vec3>&& vertexPosData) noexcept;
 		Material* GetMaterial() { return m_Material; }
 		void AttachMaterial(Material* mat) { m_Material = mat; }
-	private:
+
+		void RegisterMeshData();
+
+	protected:
 		std::vector<uint32_t> m_Indices;
 		std::vector<vec3>     m_VertexPositions;
+		std::vector<vec2>     m_TextureCoord;
 
 		Material* m_Material;
 	};

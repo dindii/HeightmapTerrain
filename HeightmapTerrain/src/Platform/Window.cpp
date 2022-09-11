@@ -161,6 +161,8 @@ namespace Height
 		m_Width = width;
 		m_Height = height;
 
+		m_AspectRatio = (float)width / (float)height;
+
 		WindowResizeEvent e(width, height);
 		EventCallback(e);
 	}

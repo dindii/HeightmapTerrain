@@ -1,9 +1,12 @@
 #pragma once
 #include <string>
 #include <Resources/Shader.h>
-#include <Resources/Texture2D.h>
+#include <Rendering/Renderer.h>
+
 namespace Height
 {
+class Texture2D;
+
 	class Material
 	{
 	public:
@@ -18,11 +21,10 @@ namespace Height
 
 		void SetViewProjection(const mat4& mat);
 
-		//void SetDiffuseMap(Texture2D* DiffuseMap);
+		void AttachMap(Texture2D* map, EMapType mapType);
+
 	private:
 		Shader* m_Shader;
-
-		//I will not implement this but I will keep this as an idea.
-		//Texture2D* m_diffuseMap = nullptr;
+		Texture2D* m_diffuseMap = nullptr;
 	};
 }

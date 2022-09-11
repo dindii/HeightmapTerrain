@@ -19,6 +19,8 @@ namespace Height
 		virtual void UploadUniformMat4(const std::string& name, const mat4& mat);
 		virtual void UploadUniformFloat4(const std::string& name, const vec4& mat);
 		virtual void UploadIntArray(const std::string& name, int* data, uint32_t count);
+		virtual void UploadInt(const std::string& name, uint32_t data);
+
 		uint32_t GetID() const { return m_RendererID; }
 
 		void operator=(const Shader& other) { m_RendererID = other.GetID(); }

@@ -80,7 +80,7 @@ namespace Height
 	void Camera::SetProjection(float AR)
 	{
 		//#TODO: More params
-		m_Projection = mat4::Perspective(m_FOV /*zoom*/, AR, 1.0f, 100.0f);
+		m_Projection = mat4::Perspective(m_FOV /*zoom*/, AR, 0.1f, 100.0f);
 	}
 
 	void Camera::RemakeProjection(float newWidth, float newHeight)
