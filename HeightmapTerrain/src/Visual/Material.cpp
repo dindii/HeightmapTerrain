@@ -5,6 +5,7 @@
 
 namespace Height
 {
+	//This is what allows us to have an optional texture. Without this, we would fetch a null texture, thus resulting in a black color (multiplying stuff by zero)
 	static Texture2D* defaultWhiteTexture;
 
 	Material::Material(const std::string& vertexpath, const std::string& fragpath)
