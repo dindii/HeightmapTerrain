@@ -20,6 +20,7 @@ void main()
 		finalColor = vec4(v_Normal.xyz, 1.0f);
 		return;
 	}
+
 	float lightConstantAttenuation = 1.0f;
 	float lightLinearAttenuation = 0.18f;
 	float lightQuadraticAttenuation = 0.016f;
@@ -29,6 +30,7 @@ void main()
 	vec3 color = texture(u_Diffuse, v_TexCoord).rgb;
 	vec3 ambient = 0.05f * color;
 
+	//We will use a simple phong lighting here. Basically, the strength of the light is the dot product between the light position and the fragment's normal.
 	vec3 lightPos = u_LightPos;
 	vec3 lightDir = normalize(lightPos - v_FragPos);
 	vec3 normal = v_Normal;
@@ -51,6 +53,7 @@ void main()
 		temporaryResult = vec3(ambient + diffuse);
 	}
 
+	//Set the color strength based on the height of the fragment.
 	temporaryResult *= ((v_heightValue + 16) / 64.0f);
 
 	finalColor = vec4(temporaryResult.xyz, 1.0f);

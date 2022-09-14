@@ -25,29 +25,47 @@ namespace Height
 	{
 		HT_ASSERT(!s_Instance, "More than one instance of Application is not allowed.");
 
+		//Our App class is a singleton
 		s_Instance = this;
 
+		//Window creation
 		m_ApplicationWindow = new Window(windowWidth, windowHeight, appName);
+		
+		//For this program, we don't need a very complex event system with observers. I will just get the events from the window (this is, input, resize etc) and receive them on the OnEvent app function
+		//from there, I will distribute it to the other app systems.
+		//I use BIND_EVENT_FN as a std::bind, so we don't need to pass the address of the app object.
 		m_ApplicationWindow->setEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
 		Renderer::SetClearColor(vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
 		m_AppCamera = Camera(m_ApplicationWindow->GetAspectRatio(), { 0.0f, 0.0f, 1.0f });
+		
+		//Camera lag is basically the smoothness of the camera movement, basically a lerp.
 		m_AppCamera.SetCameraLag(true);
 		m_AppCamera.SetCameraLagValue(0.15f);
 
+		//We allocate the mesh because we are not sure about the size of the terrain. But this could be allocated on the stack (since its members are allocated in the heap anyway).
+		//I do prefer doing this in this small project because I want to have more control.
 		m_Terrain = new TerrainMesh(heightmapTexture, 64.0f, 16.0f);
+		
+		
+		//And we allocate a material because this is an asset. This is meant to be reused a lot. In this small project, we just delete it after the app ends, but in a bigger project
+		//we usually have a asset manager that maps this asset to a shared pointer and retrieve this pointer when we try to load the same asset. So a lot of meshes can share the same material and have the same
+		//visual behavior.
 		m_TerrainMaterial = new Material("res/HeightmapVertexShader.shader","res/HeightmapFragmentShader.shader");
 
+		//This is optional, but Materials make use of Textures as well. Texture is usually a shared asset.
 		if (diffuseTexture.size() > 0)
 		{
 			m_TerrainDiffuseMap = new Texture2D(diffuseTexture);
 			m_TerrainMaterial->AttachMap(m_TerrainDiffuseMap, EMapType::DIFFUSE_MAP);
 		}
 
+		//Since the Material is an asset, we have multiple materials and set multiple different materials to the same mesh (as well as reutilize the material for other meshes)
 		m_Terrain->AttachMaterial(m_TerrainMaterial);
 
+		//Arbitrary pos
 		m_TerrainLight.SetPosition({ 0.0f, 20.0f, 0.0f });
 	}
 
@@ -68,6 +86,7 @@ namespace Height
 		{
 			m_DeltaTime.Tick();
 			
+			//Update platform Window important stuff, like input polling and swap chain
 			m_ApplicationWindow->OnUpdate();
 			
 			OnUpdate(m_DeltaTime);
@@ -87,6 +106,8 @@ namespace Height
 
 	void Application::OnEvent(Event& e)
 	{
+		//Here, we basically feed the EventDispatcher with an event and it will check the event type. If the event type is the same as the type of the Dispatch<>() function, it will call the appropriate callback
+		//and pass the corresponding event as the parameter. To keep the code kinda short, it just used lambdas, but we could just bind any functions to it as a callback.
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowResizeEvent>([&](WindowResizeEvent Event) -> bool
@@ -109,6 +130,7 @@ namespace Height
 
 			case HT_KEY_F2:
 			{
+				//Make mouse invisible and make it locked inside the screen
 				m_MouseLockedAndInvisible = !m_MouseLockedAndInvisible;
 
 				Input::HideAndLockCursor(m_MouseLockedAndInvisible);
@@ -120,6 +142,7 @@ namespace Height
 
 			case HT_KEY_F3:
 			{
+				//Make a selector that loops between all render modes
 				uint8_t fooEnum = (uint8_t)m_RenderMode;
 				fooEnum++;
 				fooEnum %= ERenderMode::END;
@@ -138,6 +161,7 @@ namespace Height
 			
 			case HT_KEY_F5:
 			{
+				//Render only the normals
 				Renderer::ToggleNormalView();
 				return true;
 			} break;
