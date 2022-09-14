@@ -20,8 +20,8 @@ namespace Height
 {
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(float windowWidth, float windowHeight, const char* appName) : m_AppRunning(true), m_MouseLockedAndInvisible(true), m_DefaultCameraSpeed(50.0f),
-		m_TerrainDiffuseMap(nullptr)
+	Application::Application(float windowWidth, float windowHeight, const char* appName, std::string heightmapTexture, std::string diffuseTexture)
+		: m_AppRunning(true), m_MouseLockedAndInvisible(true), m_DefaultCameraSpeed(50.0f), m_TerrainDiffuseMap(nullptr), m_DefaultLightSpeed(40.0f)
 	{
 		HT_ASSERT(!s_Instance, "More than one instance of Application is not allowed.");
 
@@ -37,13 +37,18 @@ namespace Height
 		m_AppCamera.SetCameraLag(true);
 		m_AppCamera.SetCameraLagValue(0.15f);
 
-		m_Terrain = new TerrainMesh("res/perlinnoise.png", 64.0f, 16.0f);
+		m_Terrain = new TerrainMesh(heightmapTexture, 64.0f, 16.0f);
 		m_TerrainMaterial = new Material("res/HeightmapVertexShader.shader","res/HeightmapFragmentShader.shader");
 
-		//m_TerrainDiffuseMap = new Texture2D("res/texturePlaceholder.png");
-		//m_TerrainMaterial->AttachMap(m_TerrainDiffuseMap, EMapType::DIFFUSE_MAP);
+		if (diffuseTexture.size() > 0)
+		{
+			m_TerrainDiffuseMap = new Texture2D(diffuseTexture);
+			m_TerrainMaterial->AttachMap(m_TerrainDiffuseMap, EMapType::DIFFUSE_MAP);
+		}
 
 		m_Terrain->AttachMaterial(m_TerrainMaterial);
+
+		m_TerrainLight.SetPosition({ 0.0f, 20.0f, 0.0f });
 	}
 
 	Application::~Application()
@@ -73,10 +78,11 @@ namespace Height
 	{
 		Renderer::Clear();
 
-		MoveCamera(dt);
 		LookAround();
+		MoveCamera(dt);
+		MoveLight(dt);
 
-		Renderer::Draw(m_Terrain, &m_AppCamera);
+		Renderer::Draw(m_Terrain, &m_AppCamera, &m_TerrainLight);
 	}
 
 	void Application::OnEvent(Event& e)
@@ -124,6 +130,18 @@ namespace Height
 
 			}   break;
 
+			case HT_KEY_F4:
+			{
+				Renderer::ToggleLightAttenuation();
+				return true;
+			} break;
+			
+			case HT_KEY_F5:
+			{
+				Renderer::ToggleNormalView();
+				return true;
+			} break;
+
 			default:
 				return false;
 			}
@@ -154,6 +172,31 @@ namespace Height
 
 		//Add this vector on the Target Position (a.k.a eye position), this is, where we are looking at, thus making a free camera style
 		m_AppCamera.AddCameraTargetPosition(IntendedCameraPosition, dt);
+	}
+
+	void Application::MoveLight(DeltaTime& dt)
+	{
+		vec3 LightPos;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_UP))
+			LightPos.z += -m_DefaultLightSpeed;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_DOWN))
+			LightPos.z += m_DefaultLightSpeed;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_LEFT))
+			LightPos.x += -m_DefaultLightSpeed;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT))
+			LightPos.x += m_DefaultLightSpeed;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT_SHIFT))
+			LightPos.y += m_DefaultLightSpeed;
+
+		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT_CONTROL))
+			LightPos.y += -m_DefaultLightSpeed;
+
+		m_TerrainLight.AddPosition(LightPos * dt);
 	}
 
 	void Application::LookAround()

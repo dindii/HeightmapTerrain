@@ -78,6 +78,8 @@ namespace Height
 		glfwSetCursorPosCallback(m_Window, WindowMouseMovedCallback);
 
 		glfwWindowHint(GLFW_SAMPLES, 4);
+
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	Window::~Window()

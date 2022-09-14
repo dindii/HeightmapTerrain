@@ -1,9 +1,18 @@
 #include <Core/Application.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-	Height::Application app(800, 450, "Height map Terrain Renderer!");
-	app.Run();
+	if (argc > 2)
+	{
+		Height::Application app(800, 450, "Height map Terrain Renderer!", argv[1], argv[2]);
+		app.Run();
+	}
+	else
+	{
+		Height::Application app(800, 450, "Height map Terrain Renderer!", argv[1]);
+		app.Run();
+	}
+	
 
 	return 0;
 }

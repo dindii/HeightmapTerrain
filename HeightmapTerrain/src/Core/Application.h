@@ -5,6 +5,7 @@
 #include <Visual/Material.h>
 #include <Camera/Camera.h>
 #include <Rendering/Renderer.h>
+#include <Light/FocalLight.h>
 
 namespace Height
 {
@@ -16,7 +17,7 @@ class TerrainMesh;
 class Application
 	{
 	public:
-		Application(float windowWidth, float windowHeight, const char* appName);
+		Application(float windowWidth, float windowHeight, const char* appName, std::string heightmapTexture, std::string diffuseTexture = std::string());
 		virtual ~Application();
 
 		void Run();
@@ -38,8 +39,10 @@ class Application
 		//Our project specific resources
 	private:
 		void MoveCamera(DeltaTime& dt);
+		void MoveLight (DeltaTime& dt);
 		void LookAround();
 		
+		FocalLight m_TerrainLight;
 		Camera   m_AppCamera;
 		TerrainMesh*     m_Terrain;
 		Material* m_TerrainMaterial;
@@ -47,5 +50,6 @@ class Application
 		bool m_MouseLockedAndInvisible;
 		ERenderMode m_RenderMode;
 		float m_DefaultCameraSpeed;
+		float m_DefaultLightSpeed;
 	};
 }

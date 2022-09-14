@@ -18,7 +18,7 @@ namespace Height
 		Renderable();
 		inline RenderingHandles GetRenderingHandles() const { return m_Handles; }
 	protected:
-		void UploadData(const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords);
+		void UploadData(const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords, const std::vector<vec3>& normals);
 
 	private:
 		RenderingHandles m_Handles;

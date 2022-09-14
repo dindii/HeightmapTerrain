@@ -26,6 +26,7 @@ namespace Height
 		std::vector<uint32_t> m_Indices;
 		std::vector<vec3>     m_VertexPositions;
 		std::vector<vec2>     m_TextureCoord;
+		std::vector<vec3>	  m_Normal;
 
 		Material* m_Material;
 	};

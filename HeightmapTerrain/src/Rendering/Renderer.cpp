@@ -9,13 +9,15 @@
 #include <Math/vec4.h>
 #include <Math/vec3.h>
 #include <Resources/Mesh.h>
-
+#include <Light/FocalLight.h>
 
 namespace Height
 {
 	//Only visible here
 	static uint32_t s_GlobalVertexArrayObject = 0;
 	static bool     s_Initialized = false;
+	bool Renderer::m_LightAttenuation = false;
+	bool Renderer::m_NormalView = false;
 
 	void Renderer::Init()
 	{
@@ -92,7 +94,7 @@ namespace Height
 		}
 	}
 
-	void Renderer::Draw(Mesh* mesh, Camera* camera)
+	void Renderer::Draw(Mesh* mesh, Camera* camera, FocalLight* light)
 	{
 		Application* app = Application::GetInstance();
 
@@ -103,8 +105,24 @@ namespace Height
 		Material* material = mesh->GetMaterial();
 		material->Bind();
 		material->SetViewProjection(camera->GetProjection() * camera->GetViewMatrix());
+		material->SetLightContext(light);
+		material->SetCameraPos(camera->GetCameraPos());
+		material->ToggleAttenuation(m_LightAttenuation);
+
+		//This will not be part of the material but of the renderer itself, so it will not be set through a material.
+		material->GetShader()->UploadInt("u_NormalView", m_NormalView);
 
 		glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, 0);
+	}
+
+	void Renderer::ToggleLightAttenuation()
+	{
+		m_LightAttenuation = !m_LightAttenuation;
+	}
+
+	void Renderer::ToggleNormalView()
+	{
+		m_NormalView = !m_NormalView;
 	}
 
 	uint32_t Renderer::GenResourceHandle()
@@ -130,25 +148,30 @@ namespace Height
 		glBindTextureUnit(type, textureHandle);
 	}
 
-	void Renderer::RegisterData(const RenderingHandles& handle, const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords)
+	void Renderer::RegisterData(const RenderingHandles& handle, const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords, const std::vector<vec3>& vertexNormals)
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle.indexBufferHandle);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, handle.vertexBufferHandle);
 
-		size_t bufferSize = (sizeof(vec3) * vertexPositions.size()) + (sizeof(vec2) * texCoords.size());
-
+		size_t bufferSize = sizeof(vec3) * vertexPositions.size() + sizeof(vec3) * vertexNormals.size() + sizeof(vec2) * texCoords.size();
 
 		glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+
+		//Upload buffer data in sequence. We do in the style of "XXXXXXXYYYYYYYYZZZZZZ" instead of "XYZXYZXYZ"
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3) * vertexPositions.size(), vertexPositions.data());
-		glBufferSubData(GL_ARRAY_BUFFER,   (sizeof(vec3) * vertexPositions.size()), (sizeof(vec2) * texCoords.size()), texCoords.data());
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(vec3) * vertexPositions.size(), (sizeof(vec3) * vertexNormals.size()), vertexNormals.data());
+		glBufferSubData(GL_ARRAY_BUFFER, (sizeof(vec3) * vertexPositions.size()) + (sizeof(vec3) * vertexNormals.size()), (sizeof(vec2) * texCoords.size()), texCoords.data());
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), (void*)((sizeof(vec3) * vertexPositions.size())));
+		//Set the stride
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(sizeof(vec3) * vertexPositions.size()));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)((sizeof(vec3) * vertexPositions.size()) + (sizeof(vec3) * vertexNormals.size())));
 	}
 
 	uint32_t Renderer::RegisterTextureResource(const uint8_t* data, const uint32_t width, const uint32_t height, const uint32_t channels)

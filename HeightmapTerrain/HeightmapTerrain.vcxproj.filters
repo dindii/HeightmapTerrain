@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{CE7141AB-BA13-6C81-A3CE-7FD58F0FF3D1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntryPoint">
+      <UniqueIdentifier>{419769CF-2D4F-AB1C-9656-8478822D460D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{E70B220D-5320-4ABE-1CA2-ED1D887546EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{E3AE1F7C-4F19-D4F2-9857-85980401B247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{000BCD17-6C75-818E-B5B3-3234215D5FE3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{7AABC339-E68A-42D5-EFA2-CDAB5B01A936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{23A78D7C-0FDE-8E0D-B8CA-7410A4E00A0F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Visual">
+      <UniqueIdentifier>{F9C527D8-E567-52AE-CE22-6602BA63D9FE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Application.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\ApplicationEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\Event.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\KeyEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Event\MouseEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\GeneralMath.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\mat4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\vec2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\vec3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\vec4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Window.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Renderable.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Scene.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Mesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Shader.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Texture2D.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\TerrainMesh.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\AppDefines.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\DeltaTime.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\HAssert.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Visual\Material.h">
+      <Filter>Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\Input.h" />
+    <ClInclude Include="src\Light\PointLight.h" />
+    <ClInclude Include="src\Light\FocalLight.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Camera\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Application.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntryPoint\main.cpp">
+      <Filter>EntryPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\mat4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\vec2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\vec3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\vec4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Window.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Renderable.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Scene.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Mesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Shader.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Texture2D.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrain\TerrainMesh.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\DeltaTime.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Visual\Material.cpp">
+      <Filter>Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Light\FocalLight.cpp" />
+    <ClCompile Include="src\Light\PointLight.cpp" />
+  </ItemGroup>
+</Project>

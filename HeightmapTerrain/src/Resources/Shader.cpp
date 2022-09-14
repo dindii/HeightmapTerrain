@@ -117,6 +117,12 @@ namespace Height
 
 	}
 
+	void Shader::UploadUniformFloat3(const std::string& name, const vec3& vec)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str()); //@TODO: Cache those locations
+		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
+
 	void Shader::UploadUniformFloat4(const std::string& name, const vec4& mat)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str()); //@TODO: Cache those locations

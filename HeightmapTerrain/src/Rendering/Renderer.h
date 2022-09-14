@@ -11,6 +11,7 @@ namespace Height
 {
 
 class Mesh;
+class FocalLight;
 
 	enum ERenderMode : uint8_t
 	{
@@ -39,14 +40,21 @@ class Mesh;
 		static void SetClearColor(const vec4& color);
 		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 		static void SetWireframeMode(ERenderMode mode);
-		static void Draw(Mesh* mesh, Camera* camera);
+		static void Draw(Mesh* mesh, Camera* camera, FocalLight* light);
+		
+		static void ToggleLightAttenuation();
+		static void ToggleNormalView();
 
 		static uint32_t GenResourceHandle();
 		static uint32_t GenIndexHandle();
 
 		static void BindTexture(uint32_t textureHandle, EMapType type);
 
-		static void RegisterData(const RenderingHandles& handle, const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords);
+		static void RegisterData(const RenderingHandles& handle, const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords, const std::vector<vec3>& normals);
 		static uint32_t RegisterTextureResource(const uint8_t* data, const uint32_t width, const uint32_t height, const uint32_t channels);
+
+	private:
+		static bool m_LightAttenuation;
+		static bool m_NormalView;
 	};
 }

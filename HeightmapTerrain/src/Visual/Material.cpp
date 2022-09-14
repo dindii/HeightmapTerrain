@@ -1,6 +1,7 @@
 #include "Material.h"
 #include <Rendering/Renderer.h>
 #include <Resources/Texture2D.h>
+#include <Light/FocalLight.h>
 
 namespace Height
 {
@@ -35,6 +36,21 @@ namespace Height
 	void Material::SetViewProjection(const mat4& mat)
 	{
 		m_Shader->UploadUniformMat4("u_ViewProjection", mat);
+	}
+
+	void Material::SetLightContext(const FocalLight* light)
+	{
+		m_Shader->UploadUniformFloat3("u_LightPos", light->GetPosition());
+	}
+
+	void Material::SetCameraPos(const vec3& camPos)
+	{
+		m_Shader->UploadUniformFloat3("u_CameraPos", camPos);
+	}
+
+	void Material::ToggleAttenuation(bool toggle)
+	{
+		m_Shader->UploadInt("u_ActivateAttenuation", toggle);
 	}
 
 	void Material::AttachMap(Texture2D* map, EMapType mapType)

@@ -12,9 +12,9 @@ namespace Height
 		m_Handles.indexBufferHandle  = Renderer::GenIndexHandle();
 	}
 
-	void Renderable::UploadData(const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords)
+	void Renderable::UploadData(const std::vector<vec3>& vertexPositions, const std::vector<uint32_t>& indices, const std::vector<vec2>& texCoords, const std::vector<vec3>& normals)
 	{
-		Renderer::RegisterData(m_Handles, vertexPositions, indices, texCoords);
+		Renderer::RegisterData(m_Handles, vertexPositions, indices, texCoords, normals);
 	}
 
 }

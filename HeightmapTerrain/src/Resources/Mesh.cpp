@@ -11,7 +11,7 @@ namespace Height
 
 	void Mesh::RegisterMeshData()
 	{
-		UploadData(m_VertexPositions, m_Indices, m_TextureCoord);
+		UploadData(m_VertexPositions, m_Indices, m_TextureCoord, m_Normal);
 	}
 
 }
