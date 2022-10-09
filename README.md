@@ -1,31 +1,29 @@
 # HeightmapTerrain
-A Terrain generated using a Heightmap
+A Terrain generated using a Heightmap  
 ------------------------------------------------------------------------------------------------------------
-How to run via command line:
-  First parameter - The heightmap image you want to generate the terrain from.
-  Second paramter [optional] - The texture you want your terrain to have.
+How to run via command line:  
+  First parameter - The heightmap image you want to generate the terrain from.  
+  Second paramter [optional] - The texture you want your terrain to have.  
 ------------------------------------------------------------------------------------------------------------
-Controls:
-  WASD - Camera movement
-  SPACE - Move camera upwards
-  LEFT CTRL - Move camera downwards
-  MOUSE - Camera look (rotation)
-
-  ESC - Close program
-  F2  - Switch between mouse or free view
-  F3  - Change render mode (Points, Lines, Triangles and Opaque)
-  F4  - Turns attenuation on (light losing strength by distance)
-  F5  - Enable normal map visualization
-
-  RIGHT SHIFT - Move the light upwards
-  RIGHT CTRL  - Move the light downwards
-  ARROW KEYS  - Controls the light source
+Controls:  
+  WASD - Camera movement  
+  SPACE - Move camera upwards  
+  LEFT CTRL - Move camera downwards  
+  MOUSE - Camera look (rotation)  
+  ESC - Close program  
+  F2  - Switch between mouse or free view  
+  F3  - Change render mode (Points, Lines, Triangles and Opaque)  
+  F4  - Turns attenuation on (light losing strength by distance)  
+  F5  - Enable normal map visualization  
+  RIGHT SHIFT - Move the light upwards  
+  RIGHT CTRL  - Move the light downwards  
+  ARROW KEYS  - Controls the light source  
 ------------------------------------------------------------------------------------------------------------
-TODO:
-  Dynamic LOD (Tessellation)
+TODO:  
+  Dynamic LOD (Tessellation)  
 ------------------------------------------------------------------------------------------------------------
-NOTES:
-  Some artifacts are present because of the resolution of the heightmap image. To make it better, please use a noise map generated from a reliable source.
+NOTES:  
+  Some artifacts are present because of the resolution of the heightmap image. To make it better, please use a noise map generated from a reliable source.  
 ------------------------------------------------------------------------------------------------------------
 ![b1](https://user-images.githubusercontent.com/19862090/194765744-f0d21f1a-47db-4496-9c41-9074b784f99c.png)
 ![b2](https://user-images.githubusercontent.com/19862090/194765746-b6710d0f-a935-46a0-8e92-772829b5cf27.png)
