@@ -52,6 +52,9 @@ namespace Height
 
 		glEnable(GL_MULTISAMPLE);
 
+		//To use tessellation
+		glPatchParameteri(GL_PATCH_VERTICES, 4);
+
 		s_Initialized = true;
 	}
 

@@ -3,10 +3,13 @@
 #include <chrono>
 
 namespace Height
-{
-	TerrainMesh::TerrainMesh(const std::string& heightMap, float scale, float offset) : m_Heightmap(heightMap)
+{																						//We will build our heightmap from this texture on the CPU side and we will not be 
+																						//consuming this texture from our shaders, so we don't need to upload it to GPU.
+																						//Maybe when doing tessellation, we will need to get this texture on the GPU in order to gen the heightmap
+	TerrainMesh::TerrainMesh(const std::string& heightMap, float scale, float offset) : m_Heightmap(heightMap, false)
 	{
-		//Used to map pixel values to [0,1]
+#if 1
+		//Used to map pixel values to [0, scale]
 		float normalizedScale = scale / 256.0f;
 
 		//We will be using the resolution of the image as the size of the terrain.
@@ -89,6 +92,11 @@ namespace Height
 			m_Normal[m_Indices[v + 2]] = vec3::Normalize((n2_old + n0));
 		}
 
+		for (int v = 0; v < m_Indices.size(); v++)
+		{
+			m_Normal[m_Indices[v]] = m_Normal[m_Indices[v]].Normalized();
+		}
+
 		//Register all attributes to opengl and upload the data to the GPU.
 		RegisterMeshData();
 
@@ -96,5 +104,51 @@ namespace Height
 
 		//Free texture byte array.
 		m_Heightmap.UnloadCPUData();
+#endif
+
+#if 0
+		int32_t height = m_Heightmap.GetHeight();
+		int32_t width = m_Heightmap.GetWidth();
+
+		unsigned rez = 20;
+		for (unsigned i = 0; i <= rez - 1; i++)
+		{
+			for (unsigned j = 0; j <= rez - 1; j++)
+			{
+				m_VertexPositions.push_back(-width / 2.0f + width * i / (float)rez); // v.x
+				m_VertexPositions.push_back(0.0f); // v.y
+				m_VertexPositions.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+
+				m_TextureCoord.push_back(i / (float)rez); // u
+				m_TextureCoord.push_back(j / (float)rez); // v
+				
+				m_VertexPositions.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
+				m_VertexPositions.push_back(0.0f); // v.y
+				m_VertexPositions.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+
+				m_TextureCoord.push_back((i + 1) / (float)rez); // u
+				m_TextureCoord.push_back(j / (float)rez); // v
+				
+				m_VertexPositions.push_back(-width / 2.0f + width * i / (float)rez); // v.x
+				m_VertexPositions.push_back(0.0f); // v.y
+				m_VertexPositions.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
+
+				m_TextureCoord.push_back(i / (float)rez); // u
+				m_TextureCoord.push_back((j + 1) / (float)rez); // v
+				
+				m_VertexPositions.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
+				m_VertexPositions.push_back(0.0f); // v.y
+				m_VertexPositions.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
+
+				m_TextureCoord.push_back((i + 1) / (float)rez); // u
+				m_TextureCoord.push_back((j + 1) / (float)rez); // v
+			}
+		}
+
+		//Register all attributes to opengl and upload the data to the GPU.
+		RegisterMeshData();
+
+#endif
+
 	}
 }

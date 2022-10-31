@@ -49,7 +49,6 @@ namespace Height
 		//I do prefer doing this in this small project because I want to have more control.
 		m_Terrain = new TerrainMesh(heightmapTexture, 64.0f, 16.0f);
 		
-		
 		//And we allocate a material because this is an asset. This is meant to be reused a lot. In this small project, we just delete it after the app ends, but in a bigger project
 		//we usually have a asset manager that maps this asset to a shared pointer and retrieve this pointer when we try to load the same asset. So a lot of meshes can share the same material and have the same
 		//visual behavior.
@@ -66,7 +65,7 @@ namespace Height
 		m_Terrain->AttachMaterial(m_TerrainMaterial);
 
 		//Arbitrary pos
-		m_TerrainLight.SetPosition({ 0.0f, 20.0f, 0.0f });
+		m_TerrainLight.SetPosition({ 0.0f, 30.0f, 0.0f });
 	}
 
 	Application::~Application()
@@ -202,25 +201,18 @@ namespace Height
 	{
 		vec3 LightPos;
 
-		if (Input::IsKeyPressed(EKeyCode::HT_KEY_UP))
-			LightPos.z += -m_DefaultLightSpeed;
-
-		if (Input::IsKeyPressed(EKeyCode::HT_KEY_DOWN))
-			LightPos.z += m_DefaultLightSpeed;
-
-		if (Input::IsKeyPressed(EKeyCode::HT_KEY_LEFT))
-			LightPos.x += -m_DefaultLightSpeed;
-
-		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT))
-			LightPos.x += m_DefaultLightSpeed;
-
 		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT_SHIFT))
 			LightPos.y += m_DefaultLightSpeed;
-
+		
 		if (Input::IsKeyPressed(EKeyCode::HT_KEY_RIGHT_CONTROL))
 			LightPos.y += -m_DefaultLightSpeed;
 
+		LightPos.x += cos(m_ApplicationWindow->GetTime()) * 1000.0f;
+		LightPos.z += sin(m_ApplicationWindow->GetTime()) * 1000.0f;
+
 		m_TerrainLight.AddPosition(LightPos * dt);
+
+		m_TerrainLight.SetPosition(m_AppCamera.GetCameraPos());
 	}
 
 	void Application::LookAround()

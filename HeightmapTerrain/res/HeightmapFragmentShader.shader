@@ -22,8 +22,8 @@ void main()
 	}
 
 	float lightConstantAttenuation = 1.0f;
-	float lightLinearAttenuation = 0.18f;
-	float lightQuadraticAttenuation = 0.016f;
+	float lightLinearAttenuation = 0.9f;
+	float lightQuadraticAttenuation = 0.032f;
 
 	vec3 temporaryResult = vec3(0.0f, 0.0f, 0.0f);
 

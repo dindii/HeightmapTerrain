@@ -163,6 +163,11 @@
     </ClCompile>
     <ClCompile Include="src\Input\Input.cpp" />
     <ClCompile Include="src\Light\FocalLight.cpp" />
-    <ClCompile Include="src\Light\PointLight.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Tes\tessFragment.shader" />
+    <None Include="res\Tes\tessVertex.shader" />
+    <None Include="res\Tes\tessTCS.shader" />
+    <None Include="res\Tes\tessTES.shader" />
   </ItemGroup>
 </Project>

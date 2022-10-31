@@ -55,7 +55,8 @@ namespace Height
 	{
 		float lenght = vec3::Length(vec);
 	
-		HT_ASSERT(lenght > 0.0f, "Cannot divide by zero");
+		if (lenght <= 0.0f)
+			return vec;
 
 		return vec3(vec.x / lenght, vec.y / lenght, vec.z / lenght);
 	}

@@ -7,12 +7,10 @@ namespace Height
 	class Shader
 	{
 	public:
-		Shader(const std::string& vertexSource, const std::string& fragmentSource);
+		Shader(const std::string& vertexSource, const std::string& fragmentSource, const std::string& tesControlSource = std::string(), const std::string& tesEvaluationSource = std::string());
 		Shader(const Shader& other) { *this = other; }
 		Shader() = default;
 		virtual ~Shader();
-
-		virtual void Init(const std::string& vertexSource, const std::string& fragmentSource);
 
 		virtual void Bind();
 		virtual void UnBind();
@@ -26,8 +24,8 @@ namespace Height
 
 		void operator=(const Shader& other) { m_RendererID = other.GetID(); }
 	private:
-		virtual void ParseShaderFiles(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-		virtual void CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
+		virtual void ParseShaderFiles(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& tesControlSource = std::string(), const std::string& tesEvaluationSource = std::string());
+		virtual void CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource, const std::string& tesControlSource = std::string(), const std::string& tesEvaluationSource = std::string());
 		virtual unsigned int CompileShader(unsigned int type, const std::string& source);
 
 	private:
