@@ -14,7 +14,7 @@ class Texture2D;
 	public:
 		//The idea here is an interface for Shader, to easily tweak some attributes and exclude the necessity of 
 		//having shaders all over the place
-		Material(const std::string& vertexpath, const std::string& fragpath);
+		Material(const std::string& vertexpath, const std::string& fragpath, const std::string& tesControlSource = std::string(), const std::string& tesEvaluationSource = std::string());
 		Material(Shader* shader) : m_Shader(shader) {};
 		~Material();
 

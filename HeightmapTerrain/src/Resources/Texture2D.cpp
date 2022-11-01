@@ -27,6 +27,8 @@ namespace Height
 
 		if (registerDataToGPU)
 			UploadGPUData();
+
+		m_Path = path;
 	}
 
 	Texture2D::~Texture2D()

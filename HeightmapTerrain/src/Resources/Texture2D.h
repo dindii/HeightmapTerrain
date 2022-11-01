@@ -26,5 +26,7 @@ namespace Height
 		uint8_t* m_RawData;
 		uint32_t m_Width, m_Height;
 		uint32_t m_ChannelsCount;
+
+		std::string m_Path;
 	};
 }

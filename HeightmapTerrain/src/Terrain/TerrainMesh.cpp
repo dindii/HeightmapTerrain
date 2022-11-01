@@ -6,9 +6,9 @@ namespace Height
 {																						//We will build our heightmap from this texture on the CPU side and we will not be 
 																						//consuming this texture from our shaders, so we don't need to upload it to GPU.
 																						//Maybe when doing tessellation, we will need to get this texture on the GPU in order to gen the heightmap
-	TerrainMesh::TerrainMesh(const std::string& heightMap, float scale, float offset) : m_Heightmap(heightMap, false)
+	TerrainMesh::TerrainMesh(const std::string& heightMap, float scale, float offset) : m_Heightmap(heightMap)
 	{
-#if 1
+#if 0
 		//Used to map pixel values to [0, scale]
 		float normalizedScale = scale / 256.0f;
 
@@ -106,42 +106,64 @@ namespace Height
 		m_Heightmap.UnloadCPUData();
 #endif
 
-#if 0
+#if 1
 		int32_t height = m_Heightmap.GetHeight();
 		int32_t width = m_Heightmap.GetWidth();
 
-		unsigned rez = 20;
+		unsigned rez = 100;
 		for (unsigned i = 0; i <= rez - 1; i++)
 		{
 			for (unsigned j = 0; j <= rez - 1; j++)
 			{
-				m_VertexPositions.push_back(-width / 2.0f + width * i / (float)rez); // v.x
-				m_VertexPositions.push_back(0.0f); // v.y
-				m_VertexPositions.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+				float x = -width / 2.0f + width * i / (float)rez;
+				float y = 0.0f;
+				float z = -height / 2.0f + height * j / (float)rez;
 
-				m_TextureCoord.push_back(i / (float)rez); // u
-				m_TextureCoord.push_back(j / (float)rez); // v
+				m_VertexPositions.push_back({ x, y, z }); 
+
+				float u = i / (float)rez;
+				float v = j / (float)rez;
+
+				m_TextureCoord.push_back({ u, v });
 				
-				m_VertexPositions.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
-				m_VertexPositions.push_back(0.0f); // v.y
-				m_VertexPositions.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+				// ----------
 
-				m_TextureCoord.push_back((i + 1) / (float)rez); // u
-				m_TextureCoord.push_back(j / (float)rez); // v
+				x = -width / 2.0f + width * (i + 1) / (float)rez;
+				y = 0.0f;
+				z = -height / 2.0f + height * j / (float)rez;
+
+				m_VertexPositions.push_back({ x, y, z }); 
+
+				u = (i + 1) / (float)rez;
+				v = j / (float)rez;
+
+				m_TextureCoord.push_back({ u, v });
 				
-				m_VertexPositions.push_back(-width / 2.0f + width * i / (float)rez); // v.x
-				m_VertexPositions.push_back(0.0f); // v.y
-				m_VertexPositions.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
-
-				m_TextureCoord.push_back(i / (float)rez); // u
-				m_TextureCoord.push_back((j + 1) / (float)rez); // v
+				// ----------
 				
-				m_VertexPositions.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
-				m_VertexPositions.push_back(0.0f); // v.y
-				m_VertexPositions.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
+				x = -width / 2.0f + width * i / (float)rez;
+				y = 0.0f;
+				z = -height / 2.0f + height * (j + 1) / (float)rez;
 
-				m_TextureCoord.push_back((i + 1) / (float)rez); // u
-				m_TextureCoord.push_back((j + 1) / (float)rez); // v
+				m_VertexPositions.push_back({ x, y, z });
+
+				u = i / (float)rez;
+				v = (j + 1) / (float)rez;
+
+				m_TextureCoord.push_back({ u, v });
+				
+				// ----------
+
+				x = -width / 2.0f + width * (i + 1) / (float)rez;
+				y = 0.0f;
+				z = -height / 2.0f + height * (j + 1) / (float)rez;
+
+				m_VertexPositions.push_back({ x, y, z }); 
+
+				u = (i + 1) / (float)rez;
+				v = (j + 1) / (float)rez;
+
+				m_TextureCoord.push_back({ u, v });
 			}
 		}
 

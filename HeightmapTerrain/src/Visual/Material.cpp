@@ -8,9 +8,9 @@ namespace Height
 	//This is what allows us to have an optional texture. Without this, we would fetch a null texture, thus resulting in a black color (multiplying stuff by zero)
 	static Texture2D* defaultWhiteTexture;
 
-	Material::Material(const std::string& vertexpath, const std::string& fragpath)
+	Material::Material(const std::string& vertexpath, const std::string& fragpath, const std::string& tesControlSource, const std::string& tesEvaluationSource)
 	{
-		m_Shader = new Shader(vertexpath, fragpath);
+		m_Shader = new Shader(vertexpath, fragpath, tesControlSource, tesEvaluationSource);
 		
 		if(!defaultWhiteTexture)
 			defaultWhiteTexture = new Texture2D("res/defaultTexture.png");

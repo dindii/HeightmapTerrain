@@ -11,6 +11,10 @@
 #include <Resources/Mesh.h>
 #include <Light/FocalLight.h>
 
+
+//DEBUG
+#include <Terrain/TerrainMesh.h>
+
 namespace Height
 {
 	//Only visible here
@@ -103,7 +107,7 @@ namespace Height
 
 		RenderingHandles meshHandles = mesh->GetRenderingHandles();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshHandles.indexBufferHandle);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshHandles.indexBufferHandle);
 		
 		Material* material = mesh->GetMaterial();
 		material->Bind();
@@ -112,10 +116,20 @@ namespace Height
 		material->SetCameraPos(camera->GetCameraPos());
 		material->ToggleAttenuation(m_LightAttenuation);
 
+
+		//#TODO Make this as not as hardcoded
+		material->GetShader()->UploadInt("u_Heightmap", 1);
+
+		//Debug
+		TerrainMesh* terrainMesh = (TerrainMesh*)mesh;
+		terrainMesh->GetTexture().Bind(EMapType::END_MAP);
+
 		//This will not be part of the material but of the renderer itself, so it will not be set through a material.
 		material->GetShader()->UploadInt("u_NormalView", m_NormalView);
 
-		glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, 0);
+	//	glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
+		glDrawArrays(GL_PATCHES, 0, 4 * 100*100);
 	}
 
 	void Renderer::ToggleLightAttenuation()

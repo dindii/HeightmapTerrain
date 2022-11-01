@@ -52,7 +52,7 @@ namespace Height
 		//And we allocate a material because this is an asset. This is meant to be reused a lot. In this small project, we just delete it after the app ends, but in a bigger project
 		//we usually have a asset manager that maps this asset to a shared pointer and retrieve this pointer when we try to load the same asset. So a lot of meshes can share the same material and have the same
 		//visual behavior.
-		m_TerrainMaterial = new Material("res/HeightmapVertexShader.shader","res/HeightmapFragmentShader.shader");
+		m_TerrainMaterial = new Material("res/Tes/tessVertex.shader","res/Tes/tessFragment.shader", "res/Tes/tessTCS.shader", "res/Tes/tessTES.shader");
 
 		//This is optional, but Materials make use of Textures as well. Texture is usually a shared asset.
 		if (diffuseTexture.size() > 0)
