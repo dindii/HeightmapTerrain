@@ -1,6 +1,6 @@
 #version 420 core
 
-layout(quads, fractional_odd_spacing, ccw) in;
+layout(quads, fractional_odd_spacing, cw) in;
 
 uniform sampler2D u_Heightmap;
 uniform mat4 u_ViewProjection;
@@ -21,7 +21,8 @@ void main()
 
 	vec2 t0 = (t01 - t00) * u + t00;
 	vec2 t1 = (t11 - t10) * u + t10;
-	vec2 textureCoord = (t1 - t0) + v + t0;
+
+	vec2 textureCoord = (t1 - t0) * v + t0;
 
 	height = texture(u_Heightmap, textureCoord).y * 64.0f - 16.0f;
 
@@ -37,7 +38,7 @@ void main()
 
 	vec4 p0 = (p01 - p00) * u + p00;
 	vec4 p1 = (p11 - p10) * u + p10;
-	vec4 p = (p1 - p0) * v + p0;
+	vec4 p =  (p1 - p0)   * v + p0;
 
 	p += normal * height;
 

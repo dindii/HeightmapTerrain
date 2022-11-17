@@ -110,7 +110,7 @@ namespace Height
 		int32_t height = m_Heightmap.GetHeight();
 		int32_t width = m_Heightmap.GetWidth();
 
-		unsigned rez = 100;
+		unsigned rez = 20;
 		for (unsigned i = 0; i <= rez - 1; i++)
 		{
 			for (unsigned j = 0; j <= rez - 1; j++)

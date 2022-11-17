@@ -129,7 +129,7 @@ namespace Height
 
 	//	glDrawElements(GL_TRIANGLES, mesh->GetIndexCount(), GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, mesh->GetVertexCount());
-		glDrawArrays(GL_PATCHES, 0, 4 * 100*100);
+		glDrawArrays(GL_PATCHES, 0, 4 * 20 * 20);
 	}
 
 	void Renderer::ToggleLightAttenuation()
