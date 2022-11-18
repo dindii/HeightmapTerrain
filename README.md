@@ -24,7 +24,8 @@ NOTES:
 ------------------------------------------------------------------------------------------------------------
 GPU TESSELLATION BRANCH:  
   In the Tessellation branch, all the mesh generation is made on the GPU so you don't need to wait while the map is being generated, also, there is level of detail (LOD) enabled.  
-![image](https://user-images.githubusercontent.com/19862090/202768101-bd8f7a38-90a9-4c01-8520-25f8d6a6a169.png)
+![image](https://user-images.githubusercontent.com/19862090/202768101-bd8f7a38-90a9-4c01-8520-25f8d6a6a169.png)![Animation](https://user-images.githubusercontent.com/19862090/202771821-1d3d7aa2-d92d-455e-887d-c44d294fed68.gif)
+
 ------------------------------------------------------------------------------------------------------------
 
 CPU Branch:
