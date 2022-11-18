@@ -19,12 +19,15 @@ Controls:
   RIGHT CTRL  - Move the light downwards  
   ARROW KEYS  - Controls the light source  
 ------------------------------------------------------------------------------------------------------------
-TODO:  
-  Dynamic LOD (Tessellation)  
-------------------------------------------------------------------------------------------------------------
 NOTES:  
   Some artifacts are present because of the resolution of the heightmap image. To make it better, please use a noise map generated from a reliable source.  
 ------------------------------------------------------------------------------------------------------------
+GPU TESSELLATION BRANCH:  
+  In the Tessellation branch, all the mesh generation is made on the GPU so you don't need to wait while the map is being generated, also, there is level of detail (LOD) enabled.  
+![image](https://user-images.githubusercontent.com/19862090/202768101-bd8f7a38-90a9-4c01-8520-25f8d6a6a169.png)
+------------------------------------------------------------------------------------------------------------
+
+CPU Branch:
 ![b1](https://user-images.githubusercontent.com/19862090/194765744-f0d21f1a-47db-4496-9c41-9074b784f99c.png)
 ![b2](https://user-images.githubusercontent.com/19862090/194765746-b6710d0f-a935-46a0-8e92-772829b5cf27.png)
 ![b3](https://user-images.githubusercontent.com/19862090/194765747-f7ee607e-fd61-480e-a2f1-5b6d1a65d44d.png)
