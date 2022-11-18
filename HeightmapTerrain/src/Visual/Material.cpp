@@ -38,6 +38,16 @@ namespace Height
 	{
 		m_Shader->UploadUniformMat4("u_ViewProjection", mat);
 	}
+	
+	void Material::SetView(const mat4& viewMat)
+	{
+		m_Shader->UploadUniformMat4("u_View", viewMat);
+	}
+	
+	void Material::SetProjection(const mat4& projMat)
+	{
+		m_Shader->UploadUniformMat4("u_Projection", projMat);
+	}
 
 	void Material::SetLightContext(const FocalLight* light)
 	{

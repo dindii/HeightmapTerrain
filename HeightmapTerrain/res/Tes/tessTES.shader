@@ -3,7 +3,8 @@
 layout(quads, fractional_odd_spacing, cw) in;
 
 uniform sampler2D u_Heightmap;
-uniform mat4 u_ViewProjection;
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 
 in vec2 TCS_TexCoord[];
 
@@ -42,5 +43,5 @@ void main()
 
 	p += normal * height;
 
-	gl_Position = u_ViewProjection * p;
+	gl_Position = u_Projection * u_View * p;
 }

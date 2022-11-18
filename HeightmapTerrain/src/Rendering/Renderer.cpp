@@ -111,7 +111,8 @@ namespace Height
 		
 		Material* material = mesh->GetMaterial();
 		material->Bind();
-		material->SetViewProjection(camera->GetProjection() * camera->GetViewMatrix());
+		material->SetView(camera->GetViewMatrix());
+		material->SetProjection(camera->GetProjection());
 		material->SetLightContext(light);
 		material->SetCameraPos(camera->GetCameraPos());
 		material->ToggleAttenuation(m_LightAttenuation);

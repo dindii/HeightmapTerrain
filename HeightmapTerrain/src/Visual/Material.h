@@ -22,6 +22,8 @@ class Texture2D;
 		inline Shader* GetShader() const { return m_Shader; }
 
 		void SetViewProjection(const mat4& mat);
+		void SetView(const mat4& viewMat);
+		void SetProjection(const mat4& projMat);
 		void SetLightContext(const FocalLight* light);
 		void SetCameraPos(const vec3& camPos);
 		void AttachMap(Texture2D* map, EMapType mapType);
